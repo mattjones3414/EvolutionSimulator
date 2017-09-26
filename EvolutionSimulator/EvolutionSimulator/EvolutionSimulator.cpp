@@ -12,8 +12,6 @@ using namespace std;
 int generation;
 int worldPopulation;
 std::vector<Creature> creatures;
-const int numCreatureAttributes = 7; // Note: Check creature.h for number of attributes
-// TODO figure out a way to make this adjust automatically, or at least be less tedious
 int maxSpecies;
 std::vector<Disease> diseases;
 
@@ -45,29 +43,6 @@ void startSimulation()
 {
 	initializeWorld();
 	initializeCreatures();
-}
-
-void reportNumSpecies()
-{
-	cout << "The seed is " << seed << ".\nThe number of species is " <<
-		creatures[0].getAttribute(totalSpecies) << ".\n";
-}
-
-void reportLargestPopulation()
-{
-	int population1 = creatures[0].getAttribute(population);
-	int largestSpeciesID = 0;
-	for (int i = 1; i < creatures[0].getAttribute(totalSpecies); i++)
-	{
-		int population2 = creatures[i].getAttribute(population);
-		if (population2 > population1)
-		{
-			population1 = population2;
-			largestSpeciesID = i;
-		}
-	}
-	cout << "The largest population is " << population1 << ", belonging to Species "
-		<< creatures[largestSpeciesID].getAttribute(speciesID) << ".\n";
 }
 
 bool continueSimulation()
@@ -102,6 +77,30 @@ int getWorldPopulation()
 	return worldPopulation;
 }
 
+int getLargestSpeciesID()
+{
+	int population1 = creatures[0].getAttribute(population);
+	int largestSpeciesID = 0;
+	for (int i = 1; i < creatures[0].getAttribute(totalSpecies); i++)
+	{
+		int population2 = creatures[i].getAttribute(population);
+		if (population2 > population1)
+		{
+			population1 = population2;
+			largestSpeciesID = i;
+		}
+	}
+	return largestSpeciesID;
+}
+
+void reportWorldState()
+{
+	cout << "Generation " << generation << ". The world population is " << getWorldPopulation() << ".\n";
+	cout << "The number of species is " << creatures[0].getAttribute(totalSpecies) << ".\n";
+	cout << "The largest population is " << creatures[getLargestSpeciesID()].getAttribute(population) <<
+		", belonging to Species " << creatures[getLargestSpeciesID()].getAttribute(speciesID) << ".\n";
+}
+
 void advanceGeneration()
 {
 	for (int i = 0; i < creatures[0].getAttribute(totalSpecies); i++)
@@ -109,23 +108,18 @@ void advanceGeneration()
 		creatures[i].reproduce();
 	}
 	generation++;
-	cout << "Generation " << generation << ". The world population is " << getWorldPopulation()
-		<< ".\n";
+	reportWorldState();
 }
 
 int main()
 {
 	
 	startSimulation();
-
-	reportNumSpecies();
-	reportLargestPopulation();
-
+	reportWorldState();
 	while (continueSimulation())
 	{
 		advanceGeneration();
 	}
-	
 
     return 0;
 }

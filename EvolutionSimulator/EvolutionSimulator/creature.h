@@ -12,7 +12,6 @@ enum attributesList {
 class Creature
 {
 private:
-	// Change EvolutionSimulator.cpp => numCreatureAttributes whenever this changes
 	int speciesID;
 	static int totalSpecies;
 	int population;
@@ -26,7 +25,6 @@ public:
 	void setPopulation(int, int);
 	void configurePropagation();
 	void reproduce();
-	//void getAllAttributes(int*);
 	int getAttribute(attributesList);
 };
 
@@ -92,22 +90,6 @@ void Creature::reproduce()
 			population << " individuals. Its population did not grow.\n";
 	}
 }
-
-/*void Creature::getAllAttributes(int* attributeList)
-{
-	// Must be dereferenced (*)
-	// i.e. int* attributes = getAllAttributes;
-	//		maxPopulation = *(attributes+2);
-	//		OR
-	//		speciesID = attributes[0];
-	attributeList[0] = Creature::speciesID;
-	attributeList[1] = Creature::totalSpecies;
-	attributeList[2] = Creature::population;
-	attributeList[3] = Creature::maxPopulation;
-	attributeList[4] = Creature::minSpawnPerIndPerGen;
-	attributeList[5] = Creature::maxSpawnPerIndPerGen;
-	attributeList[6] = Creature::avgSpawnPerIndPerGen;
-}*/
 
 int Creature::getAttribute(attributesList attribute)
 {
