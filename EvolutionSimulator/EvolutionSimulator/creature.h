@@ -4,6 +4,11 @@
 #include <math.h>
 #include <iostream>
 
+enum attributesList {
+	speciesID, totalSpecies, population, maxPopulation, minSpawnPerIndPerGen,
+	maxSpawnPerIndPerGen, avgSpawnPerIndPerGen
+}; // TODO find a more organized location for this
+
 class Creature
 {
 private:
@@ -21,10 +26,11 @@ public:
 	void setPopulation(int, int);
 	void configurePropagation();
 	void reproduce();
-	void getAttributes(int*);
+	//void getAllAttributes(int*);
+	int getAttribute(attributesList);
 };
 
-int Creature::totalSpecies = 0;
+int Creature::totalSpecies = 0; // TODO does this need to be here?
 
 Creature::Creature()
 {
@@ -87,10 +93,10 @@ void Creature::reproduce()
 	}
 }
 
-void Creature::getAttributes(int* attributeList)
+/*void Creature::getAllAttributes(int* attributeList)
 {
 	// Must be dereferenced (*)
-	// i.e. int* attributes = getAttributes;
+	// i.e. int* attributes = getAllAttributes;
 	//		maxPopulation = *(attributes+2);
 	//		OR
 	//		speciesID = attributes[0];
@@ -101,4 +107,12 @@ void Creature::getAttributes(int* attributeList)
 	attributeList[4] = Creature::minSpawnPerIndPerGen;
 	attributeList[5] = Creature::maxSpawnPerIndPerGen;
 	attributeList[6] = Creature::avgSpawnPerIndPerGen;
+}*/
+
+int Creature::getAttribute(attributesList attribute)
+{
+	int attributeValues[] = { Creature::speciesID, Creature::totalSpecies, Creature::population,
+		Creature::maxPopulation, Creature::minSpawnPerIndPerGen, Creature::maxSpawnPerIndPerGen,
+		Creature::avgSpawnPerIndPerGen };
+	return attributeValues[attribute];
 }

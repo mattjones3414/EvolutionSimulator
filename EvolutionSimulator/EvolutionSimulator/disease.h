@@ -10,7 +10,7 @@ private:
 public:
 	Disease::Disease();
 	Disease(int a, int b, int c) : lethality(a), duration(b), spreadChance(c) {};
-	void getAttributes(int*);
+	void getAllAttributes(int*);
 };
 
 Disease::Disease()
@@ -20,10 +20,10 @@ Disease::Disease()
 	spreadChance = 15;
 }
 
-void Disease::getAttributes(int* attributesList)
+void Disease::getAllAttributes(int* attributesList)
 {
 	// Must be dereferenced (*)
-	// i.e. int* attributes = getAttributes;
+	// i.e. int* attributes = getAllAttributes;
 	//		lethality = attributes[1];
 	//		OR
 	//		lethality = *(attributes+1)

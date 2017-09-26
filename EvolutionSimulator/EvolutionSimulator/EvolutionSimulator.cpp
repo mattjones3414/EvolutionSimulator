@@ -36,9 +36,7 @@ void initializeCreatures()
 		creatures[i].setPopulation(remainingPopulation, remainingSpecies);
 		creatures[i].configurePropagation();
 
-		int attributes[numCreatureAttributes];
-		creatures[i].getAttributes(attributes);
-		remainingPopulation = remainingPopulation - attributes[2];
+		remainingPopulation = remainingPopulation - creatures[i].getAttribute(population);
 		remainingSpecies--;
 	}
 }
@@ -51,27 +49,25 @@ void startSimulation()
 
 void reportNumSpecies()
 {
-	cout << "The seed is " << seed << ".\n";
-	int attributes[numCreatureAttributes];
-	creatures[0].getAttributes(attributes);
-	cout << "The number of species is " << attributes[1] << ".\n";
+	cout << "The seed is " << seed << ".\nThe number of species is " <<
+		creatures[0].getAttribute(totalSpecies) << ".\n";
 }
 
 void reportLargestPopulation()
 {
-	int attributes1[numCreatureAttributes];
-	creatures[0].getAttributes(attributes1);
-	int attributes2[numCreatureAttributes];
-	for (int i = 1; i < attributes1[1]; i++)
+	int population1 = creatures[0].getAttribute(population);
+	int largestSpeciesID = 0;
+	for (int i = 1; i < creatures[0].getAttribute(totalSpecies); i++)
 	{
-		creatures[i].getAttributes(attributes2);
-		if (attributes2[2] > attributes1[2])
+		int population2 = creatures[i].getAttribute(population);
+		if (population2 > population1)
 		{
-			creatures[i].getAttributes(attributes1);
+			population1 = population2;
+			largestSpeciesID = i;
 		}
 	}
-	cout << "The largest population is " << attributes1[2] <<
-		", belonging to Species " << attributes1[0] << ".\n";
+	cout << "The largest population is " << population1 << ", belonging to Species "
+		<< creatures[largestSpeciesID].getAttribute(speciesID) << ".\n";
 }
 
 bool continueSimulation()
@@ -98,29 +94,20 @@ bool continueSimulation()
 
 int getWorldPopulation()
 {
-	int attributes[numCreatureAttributes];
-	creatures[0].getAttributes(attributes);
-	int population = attributes[2];
-	for (int i = 1; i < attributes[1]; i++)
+	int worldPopulation = 0;
+	for (int i = 1; i < creatures[0].getAttribute(totalSpecies); i++)
 	{
-		creatures[i].getAttributes(attributes);
-		population += attributes[2];
+		worldPopulation += creatures[i].getAttribute(population);
 	}
-	return population;
+	return worldPopulation;
 }
 
 void advanceGeneration()
 {
-	int attributes[numCreatureAttributes];
-	creatures[0].getAttributes(attributes);
-	int start_s = clock();
-	for (int i = 0; i < attributes[1]; i++)
+	for (int i = 0; i < creatures[0].getAttribute(totalSpecies); i++)
 	{
 		creatures[i].reproduce();
 	}
-	int stop_s = clock();
-	cout << "Loop time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << endl;
-
 	generation++;
 	cout << "Generation " << generation << ". The world population is " << getWorldPopulation()
 		<< ".\n";
